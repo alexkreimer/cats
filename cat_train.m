@@ -30,11 +30,10 @@ neg_folder = 'negative';
 if ~exist('model_feat.mat','file')
     fprintf('generating model features...');
     mparams.filenames = [dir(fullfile(pos_folder,'*.png')); dir(fullfile(pos_folder,'*.jpg'))];
-    mparams.filenames = mparams.filenames(1:20);
+    mparams.filenames = mparams.filenames(1:10);
     mparams.dirname = pos_folder;
     mparams.gridstep = 20;
     mparams.winsize = [40 40];
-    mparams.dodraw = 0;
     feat = gen_model_feat(mparams);
     fprintf('done\n');
     save('model_feat.mat','feat','mparams');
@@ -46,11 +45,14 @@ end
 if ~exist('pos_feat.mat','file')
     fprintf('generating dists from model to the positive images...');
     pparams.filenames = [dir(fullfile(pos_folder,'*.png')); dir(fullfile(pos_folder,'*.jpg'))];
-    pparams.filenames = pparams.filenames(30:35);
+    pparams.filenames = pparams.filenames(1:20);
     pparams.dirname = pos_folder;
-    pparams.gridstep = 20;
-    pparams.winsize = [40 40];
-    pparams.dodraw = 0;
+    % for euclidean distance just don't set dist_fn, the distances will be
+    % calculated using conv2. gridstep & winsize only relevant for non
+    % euclidean distances
+    % pparams.dist_fn = @(x,y) norm(x-y);
+    % pparams.gridstep = 20;
+    % pparams.winsize = [40 40];
     feat = calc_dists(pparams,feat,'pos');
     fprintf('done\n');
     save('pos_feat.mat','feat','pparams');
@@ -62,11 +64,15 @@ end
 if ~exist('neg_feat.mat','file')
     fprintf('generating dists from model to the negative images...');
     nparams.filenames = [dir(fullfile(neg_folder,'*.png')); dir(fullfile(neg_folder,'*.jpg'))];
-    nparams.filenames = nparams.filenames(1:5);
+    nparams.filenames = nparams.filenames(1:20);
     nparams.dirname = neg_folder;
-    nparams.gridstep = 20;
-    nparams.winsize = [40 40];
-    nparams.dodraw = 0;
+    
+    % for euclidean distance just don't set dist_fn, the distances will be
+    % calculated using conv2. gridstep & winsize only relevant for non
+    % euclidean distances
+    % nparams.dist_fn = @(x,y) norm(x-y);
+    % nparams.gridstep = 20;
+    % nparams.winsize = [40 40];
     feat = calc_dists(nparams,feat,'neg');
     fprintf('done\n');
     save('neg_feat.mat','feat','nparams');

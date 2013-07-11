@@ -17,13 +17,10 @@ function feat = gen_model_feat(params)
 
 % size of a model set
 N = length(params.filenames);
-dodraw = params.dodraw;
 grid_step = params.gridstep;
 win_size = params.winsize;
-
 feat = struct;
 k = 1;
-
 %# collect feature candidates from all images over a grid
 for i = 1:N
     %read the file
@@ -37,29 +34,13 @@ for i = 1:N
     end
     i1 = im2double(i1);
 
-    if dodraw
-        imshow(i1);
-        rect_h = nan;
-    end
-    
     % go over the grid and choose the patches
     for x = 1:grid_step:size(i1,2)-win_size(2)
         for y = 1:grid_step:size(i1,1)-win_size(1)
             win = i1(y:y+win_size(1)-1,x:x+win_size(2)-1);
-            
             feat(k).data = win(:);
             feat(k).src  = filename;
-
             k = k + 1;
-            
-            if dodraw
-                if ishandle(rect_h)
-                    set(rect_h,'Position',[x,y,win_size(1),win_size(2)]);
-                else
-                    rect_h = rectangle('Position',[x,y,win_size(1),win_size(2)],'edgecolor','r');
-                end
-                drawnow;
-            end
         end
     end
 end

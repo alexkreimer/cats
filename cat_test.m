@@ -2,7 +2,7 @@
 
 close all; clearvars; dbstop if error;
 
-test_im = '';
+test_im = 'test1.jpg';
 
 i1 = im2double(imread(test_im));
 if size(i1,3) ~= 1
@@ -14,7 +14,7 @@ load good_feat
 
 params.gridstep = 20;
 params.winsize = [40 40];
-params.dist_fn = @(x,y) norm(x,y);
+params.dist_fn = @(x,y) norm(x-y);
 
 fv = feat_vect(good_feat,i1,params);
-pred = svmclassify(model, fv, 'Showplot',false);
+pred = svmclassify(model, fv', 'Showplot',false);

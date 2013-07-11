@@ -1,4 +1,4 @@
-﻿% will pollute your wokspace, sorry about that :)
+% will pollute your wokspace, sorry about that :)
 
 close all; clearvars; dbstop if error;
 

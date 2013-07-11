@@ -1,4 +1,4 @@
-﻿function dst = dst2im(i1,ft,grid_step,win_size,dist_fn)
+function dst = dst2im(i1,ft,grid_step,win_size,dist_fn)
 
 % compute distance from a feature to an image as a minimum over a grid of
 % patches.

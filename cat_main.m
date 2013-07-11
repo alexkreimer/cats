@@ -139,3 +139,6 @@ cp.CorrectRate
 %# get confusion matrix
 %# columns:actual, rows:predicted, last-row: unclassified instances
 cp.CountingMatrix
+
+save('svm.mat','model');
+save('good_feat.mat','good_feat');

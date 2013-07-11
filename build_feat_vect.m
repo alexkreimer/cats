@@ -26,11 +26,3 @@ for i = 1:N2
         X(j,i) = binarize(good_feat(i).(field)(j).dst,good_feat(i).th);
     end
 end
-
-function b = binarize(val,thresh)
-
-if val>=thresh
-    b = 0;
-else
-    b = 1;
-end

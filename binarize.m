@@ -1,7 +1,11 @@
-function b = binarize(val,thresh)
+function b = binarize(val,thresh,labels)
+
+if nargin == 2
+    labels = [1 0];
+end
 
 if val>=thresh
-    b = 0;
+    b = labels(2);
 else
-    b = 1;
+    b = labels(1);
 end

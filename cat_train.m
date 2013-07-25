@@ -45,7 +45,7 @@ end
 if ~exist('pos_feat.mat','file')
     fprintf('generating dists from model to the positive images...');
     pparams.filenames = [dir(fullfile(pos_folder,'*.png')); dir(fullfile(pos_folder,'*.jpg'))];
-    pparams.filenames = pparams.filenames(1:20);
+    pparams.filenames = pparams.filenames(11:21);
     pparams.dirname = pos_folder;
     % for euclidean distance just don't set dist_fn, the distances will be
     % calculated using conv2. gridstep & winsize only relevant for non
@@ -64,7 +64,7 @@ end
 if ~exist('neg_feat.mat','file')
     fprintf('generating dists from model to the negative images...');
     nparams.filenames = [dir(fullfile(neg_folder,'*.png')); dir(fullfile(neg_folder,'*.jpg'))];
-    nparams.filenames = nparams.filenames(1:20);
+    nparams.filenames = nparams.filenames(1:10);
     nparams.dirname = neg_folder;
     
     % for euclidean distance just don't set dist_fn, the distances will be

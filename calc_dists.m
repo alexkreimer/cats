@@ -24,4 +24,5 @@ for i = 1:N
         end
         feat(k).(field)(i).filename = filename;
     end
+    fprintf('%d out of %d\n',i,N);
 end

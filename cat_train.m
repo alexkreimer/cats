@@ -30,13 +30,13 @@ neg_folder = 'negative';
 if ~exist('model_feat.mat','file')
     fprintf('generating model features...');
     mparams.filenames = [dir(fullfile(pos_folder,'*.png')); dir(fullfile(pos_folder,'*.jpg'))];
-    mparams.filenames = mparams.filenames(1:10);
+    mparams.filenames = mparams.filenames(1:20);
     mparams.dirname = pos_folder;
     mparams.gridstep = 20;
     mparams.winsize = [40 40];
     feat = gen_model_feat(mparams);
     fprintf('done\n');
-    save('model_feat.mat','feat','mparams');
+    save -v7.3 'model_feat.mat' 'feat' 'mparams'
 else
     fprintf('reading model features from model_feat.mat\n');
     load model_feat
@@ -53,9 +53,10 @@ if ~exist('pos_feat.mat','file')
     % pparams.dist_fn = @(x,y) norm(x-y);
     % pparams.gridstep = 20;
     % pparams.winsize = [40 40];
+    pparams.dist_fn = @dst2im_xcor;
     feat = calc_dists(pparams,feat,'pos');
     fprintf('done\n');
-    save('pos_feat.mat','feat','pparams');
+    save -v7.3 'pos_feat.mat' 'feat' 'pparams'
 else
     fprintf('reading pre-computed distances to positive samples from pos_feat.mat\n');
     load pos_feat
@@ -70,12 +71,13 @@ if ~exist('neg_feat.mat','file')
     % for euclidean distance just don't set dist_fn, the distances will be
     % calculated using conv2. gridstep & winsize only relevant for non
     % euclidean distances
-    % nparams.dist_fn = @(x,y) norm(x-y);
+    % nparams.dist_fn = 
     % nparams.gridstep = 20;
     % nparams.winsize = [40 40];
+    nparams.dist_fn = @dst2im_xcor;
     feat = calc_dists(nparams,feat,'neg');
     fprintf('done\n');
-    save('neg_feat.mat','feat','nparams');
+    save -v7.3 'neg_feat.mat' 'feat' 'nparams'
 else
     fprintf('reading pre-computed distances to negative samples from neg_feat.mat\n');
     load neg_feat

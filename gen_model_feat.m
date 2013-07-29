@@ -38,7 +38,7 @@ for i = 1:N
     for x = 1:grid_step:size(i1,2)-win_size(2)
         for y = 1:grid_step:size(i1,1)-win_size(1)
             win = i1(y:y+win_size(1)-1,x:x+win_size(2)-1);
-            feat(k).data = win(:);
+            feat(k).data = win;
             feat(k).src  = filename;
             k = k + 1;
         end

@@ -2,6 +2,10 @@ function feat = calc_dists(params,feat,field)
 
 N = length(params.filenames);
 
+if ~isfield(params, 'dist_fn')
+    params.dist_fn = @dst2in_conv;
+end
+
 %# for_each image calc its distance to every patch
 for i = 1:N
     %read the file
@@ -17,11 +21,7 @@ for i = 1:N
     
     % for each feature compute the distance
     for k = 1:length(feat)
-        if isfield(params, 'dist_fn')
-            feat(k).(field)(i).dst = dst2im(i1,feat(k).data(:),params.gridstep,params.winsize,params.dist_fn);
-        else
-            feat(k).(field)(i).dst = dst2im_conv(i1,feat(k).data(:));
-        end
+        feat(k).(field)(i).dst = params.dist_fn(i1,feat(k).data,params);
         feat(k).(field)(i).filename = filename;
     end
     fprintf('%d out of %d\n',i,N);

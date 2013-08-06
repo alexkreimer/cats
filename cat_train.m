@@ -1,6 +1,8 @@
-% will pollute your wokspace, sorry about that :)
+function cat_train(dst_fn,label)
 
-close all; clearvars; dbstop if error;
+model_feat_file = sprintf('model_feat_%s.mat',label);
+pos_feat_file = sprintf('pos_feat_%s.mat',label);
+neg_feat_file = sprintf('neg_feat_%s.mat',label);
 
 % Cegorization:
 %   Given an image, decide if there's an object of this category in it
@@ -27,7 +29,7 @@ neg_folder = 'negative';
 
 % first, choose a number of images as a 'model' set and generate a set of
 % candidate features
-if ~exist('model_feat.mat','file')
+if ~exist(model_feat_file,'file')
     fprintf('generating model features...');
     mparams.filenames = [dir(fullfile(pos_folder,'*.png')); dir(fullfile(pos_folder,'*.jpg'))];
     mparams.filenames = mparams.filenames(1:20);
@@ -36,55 +38,42 @@ if ~exist('model_feat.mat','file')
     mparams.winsize = [40 40];
     feat = gen_model_feat(mparams);
     fprintf('done\n');
-    save -v7.3 'model_feat.mat' 'feat' 'mparams'
+    save(model_feat_file,'feat','mparams','-v7.3');
 else
-    fprintf('reading model features from model_feat.mat\n');
-    load model_feat
+    fprintf('reading model features from %s\n',model_feat_file);
+    load(model_feat_file)
 end
 
-if ~exist('pos_feat.mat','file')
+if ~exist(pos_feat_file,'file')
     fprintf('generating dists from model to the positive images...');
     pparams.filenames = [dir(fullfile(pos_folder,'*.png')); dir(fullfile(pos_folder,'*.jpg'))];
     pparams.filenames = pparams.filenames(11:21);
     pparams.dirname = pos_folder;
-    % for euclidean distance just don't set dist_fn, the distances will be
-    % calculated using conv2. gridstep & winsize only relevant for non
-    % euclidean distances
-    % pparams.dist_fn = @(x,y) norm(x-y);
-    % pparams.gridstep = 20;
-    % pparams.winsize = [40 40];
-    pparams.dist_fn = @dst2im_xcor;
+    pparams.dist_fn = dst_fn;
     feat = calc_dists(pparams,feat,'pos');
     fprintf('done\n');
-    save -v7.3 'pos_feat.mat' 'feat' 'pparams'
+    save(pos_feat_file,'feat','pparams','-v7.3');
 else
-    fprintf('reading pre-computed distances to positive samples from pos_feat.mat\n');
-    load pos_feat
+    fprintf('reading pre-computed distances to positive samples from %s\n',pos_feat_file);
+    load(pos_feat_file)
 end
 
-if ~exist('neg_feat.mat','file')
+if ~exist(neg_feat_file,'file')
     fprintf('generating dists from model to the negative images...');
     nparams.filenames = [dir(fullfile(neg_folder,'*.png')); dir(fullfile(neg_folder,'*.jpg'))];
     nparams.filenames = nparams.filenames(1:10);
     nparams.dirname = neg_folder;
-    
-    % for euclidean distance just don't set dist_fn, the distances will be
-    % calculated using conv2. gridstep & winsize only relevant for non
-    % euclidean distances
-    % nparams.dist_fn = 
-    % nparams.gridstep = 20;
-    % nparams.winsize = [40 40];
-    nparams.dist_fn = @dst2im_xcor;
+    nparams.dist_fn = dst_fn;
     feat = calc_dists(nparams,feat,'neg');
     fprintf('done\n');
-    save -v7.3 'neg_feat.mat' 'feat' 'nparams'
+    save(neg_feat_file,'feat','nparams','-v7.3');
 else
-    fprintf('reading pre-computed distances to negative samples from neg_feat.mat\n');
-    load neg_feat
+    fprintf('reading pre-computed distances to negative samples from %s\n',neg_feat_file);
+    load(neg_feat_file)
 end
 
 good_feat = select_good_feat(feat,10,'pos','neg');
-save_features(good_feat);
+save_features(good_feat,label);
 
 % build feature vectors
 Xp = build_feat_vect(good_feat,'pos');
@@ -148,5 +137,5 @@ cp.CorrectRate
 %# columns:actual, rows:predicted, last-row: unclassified instances
 cp.CountingMatrix
 
-save('svm.mat','model');
-save('good_feat.mat','good_feat');
+save(sprintf('svm_%s.mat',label),'model');
+save(sprintf('good_feat_%s.mat',label),'good_feat');

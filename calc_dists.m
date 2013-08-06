@@ -20,5 +20,5 @@ for i = 1:N
         feat(k).(field)(i).dst = params.dist_fn(i1,feat(k).data);
         feat(k).(field)(i).filename = filename;
     end
-    fprintf('%d out of %d\n',i,N);
+    fprintf('%d..',i);
 end

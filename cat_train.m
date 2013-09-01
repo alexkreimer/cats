@@ -32,16 +32,18 @@ neg_folder = 'negative';
 if ~exist(model_feat_file,'file')
     fprintf('generating model features...');
     mparams.filenames = [dir(fullfile(pos_folder,'*.png')); dir(fullfile(pos_folder,'*.jpg'))];
-    mparams.filenames = mparams.filenames(1:20);
+    mparams.filenames = mparams.filenames(1:2);
     mparams.dirname = pos_folder;
     mparams.gridstep = 20;
-    mparams.winsize = [40 40];
+    % make sure these are odd if you your RT metric funcs (@ssd etc)
+    mparams.winsize = [41 41];
     feat = gen_model_feat(mparams);
     fprintf('done\n');
     save(model_feat_file,'feat','mparams','-v7.3');
 else
-    fprintf('reading model features from %s\n',model_feat_file);
+    fprintf('reading model features from %s...',model_feat_file);
     load(model_feat_file)
+    fprintf('done\n');
 end
 
 if ~exist(pos_feat_file,'file')
@@ -54,8 +56,9 @@ if ~exist(pos_feat_file,'file')
     fprintf('done\n');
     save(pos_feat_file,'feat','pparams','-v7.3');
 else
-    fprintf('reading pre-computed distances to positive samples from %s\n',pos_feat_file);
-    load(pos_feat_file)
+    fprintf('reading pre-computed distances to positive samples from %s...',pos_feat_file);
+    load(pos_feat_file);
+    fprintf('done\n');
 end
 
 if ~exist(neg_feat_file,'file')
@@ -68,12 +71,15 @@ if ~exist(neg_feat_file,'file')
     fprintf('done\n');
     save(neg_feat_file,'feat','nparams','-v7.3');
 else
-    fprintf('reading pre-computed distances to negative samples from %s\n',neg_feat_file);
-    load(neg_feat_file)
+    fprintf('reading pre-computed distances to negative samples from %s...',neg_feat_file);
+    load(neg_feat_file);
+    fprintf('done\n');
 end
 
+fprintf('selecting & saving features...');
 good_feat = select_good_feat(feat,10,'pos','neg');
 save_features(good_feat,label);
+fprintf('done\n');
 
 % build feature vectors
 Xp = build_feat_vect(good_feat,'pos');

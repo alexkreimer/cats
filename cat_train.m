@@ -32,17 +32,17 @@ neg_folder = 'negative';
 if ~exist(model_feat_file,'file')
     fprintf('generating model features...');
     mparams.filenames = [dir(fullfile(pos_folder,'*.png')); dir(fullfile(pos_folder,'*.jpg'))];
-    mparams.filenames = mparams.filenames(1:20);
+    mparams.filenames = mparams.filenames(1:2);
     mparams.dirname = pos_folder;
     mparams.gridstep = 20;
-    mparams.winsize = [40 40];
+    mparams.winsize = [41 41];
     feat = gen_model_feat(mparams);
-    fprintf('done\n');
     save(model_feat_file,'feat','mparams','-v7.3');
 else
-    fprintf('reading model features from %s\n',model_feat_file);
-    load(model_feat_file)
+    fprintf('reading model features from %s...',model_feat_file);
+    load(model_feat_file);
 end
+fprintf('done\n');
 
 if ~exist(pos_feat_file,'file')
     fprintf('generating dists from model to the positive images...');
@@ -51,12 +51,12 @@ if ~exist(pos_feat_file,'file')
     pparams.dirname = pos_folder;
     pparams.dist_fn = dst_fn;
     feat = calc_dists(pparams,feat,'pos');
-    fprintf('done\n');
     save(pos_feat_file,'feat','pparams','-v7.3');
 else
-    fprintf('reading pre-computed distances to positive samples from %s\n',pos_feat_file);
-    load(pos_feat_file)
+    fprintf('reading pre-computed distances to positive samples from %s...',pos_feat_file);
+    load(pos_feat_file);
 end
+fprintf('done\n');
 
 if ~exist(neg_feat_file,'file')
     fprintf('generating dists from model to the negative images...');
@@ -65,15 +65,18 @@ if ~exist(neg_feat_file,'file')
     nparams.dirname = neg_folder;
     nparams.dist_fn = dst_fn;
     feat = calc_dists(nparams,feat,'neg');
-    fprintf('done\n');
+    
     save(neg_feat_file,'feat','nparams','-v7.3');
 else
-    fprintf('reading pre-computed distances to negative samples from %s\n',neg_feat_file);
-    load(neg_feat_file)
+    fprintf('reading pre-computed distances to negative samples from %s...',neg_feat_file);
+    load(neg_feat_file);
 end
+fprintf('done\n');
 
+fprintf('selecting and saving features...');
 good_feat = select_good_feat(feat,10,'pos','neg');
 save_features(good_feat,label);
+fprintf('done\n');
 
 % build feature vectors
 Xp = build_feat_vect(good_feat,'pos');

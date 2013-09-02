@@ -1,6 +1,7 @@
 function feat = calc_dists(params,feat,field)
 
 N = length(params.filenames);
+fprintf('%d images...',N);
 
 %# for_each image calc its distance to every patch
 for i = 1:N
@@ -20,5 +21,5 @@ for i = 1:N
         feat(k).(field)(i).dst = params.dist_fn(i1,feat(k).data);
         feat(k).(field)(i).filename = filename;
     end
-    fprintf('%d out of %d\n',i,N);
+    fprintf('%d...',i);
 end

@@ -55,6 +55,8 @@ for i = 1:nfeat
     good_feat(i).er = err(good_ind(i));
 end
 
+return;
+
 for k = 1:nfeat
     [np,xc_pos] = hist([good_feat(k).(pos_field).dst]);
     [nn,xc_neg] = hist([good_feat(k).(neg_field).dst]);

@@ -35,16 +35,23 @@ if ~exist(model_feat_file,'file')
     mparams.filenames = mparams.filenames(1:2);
     mparams.dirname = pos_folder;
     mparams.gridstep = 20;
+<<<<<<< HEAD
     % make sure these are odd if you your RT metric funcs (@ssd etc)
+=======
+>>>>>>> cbce208b5ad6ba04d1b2f065e2924e3dc426e726
     mparams.winsize = [41 41];
     feat = gen_model_feat(mparams);
-    fprintf('done\n');
     save(model_feat_file,'feat','mparams','-v7.3');
 else
     fprintf('reading model features from %s...',model_feat_file);
+<<<<<<< HEAD
     load(model_feat_file)
     fprintf('done\n');
+=======
+    load(model_feat_file);
+>>>>>>> cbce208b5ad6ba04d1b2f065e2924e3dc426e726
 end
+fprintf('done\n');
 
 if ~exist(pos_feat_file,'file')
     fprintf('generating dists from model to the positive images...');
@@ -53,13 +60,16 @@ if ~exist(pos_feat_file,'file')
     pparams.dirname = pos_folder;
     pparams.dist_fn = dst_fn;
     feat = calc_dists(pparams,feat,'pos');
-    fprintf('done\n');
     save(pos_feat_file,'feat','pparams','-v7.3');
 else
     fprintf('reading pre-computed distances to positive samples from %s...',pos_feat_file);
     load(pos_feat_file);
+<<<<<<< HEAD
     fprintf('done\n');
+=======
+>>>>>>> cbce208b5ad6ba04d1b2f065e2924e3dc426e726
 end
+fprintf('done\n');
 
 if ~exist(neg_feat_file,'file')
     fprintf('generating dists from model to the negative images...');
@@ -68,15 +78,23 @@ if ~exist(neg_feat_file,'file')
     nparams.dirname = neg_folder;
     nparams.dist_fn = dst_fn;
     feat = calc_dists(nparams,feat,'neg');
-    fprintf('done\n');
+    
     save(neg_feat_file,'feat','nparams','-v7.3');
 else
     fprintf('reading pre-computed distances to negative samples from %s...',neg_feat_file);
     load(neg_feat_file);
+<<<<<<< HEAD
     fprintf('done\n');
+=======
+>>>>>>> cbce208b5ad6ba04d1b2f065e2924e3dc426e726
 end
+fprintf('done\n');
 
+<<<<<<< HEAD
 fprintf('selecting & saving features...');
+=======
+fprintf('selecting and saving features...');
+>>>>>>> cbce208b5ad6ba04d1b2f065e2924e3dc426e726
 good_feat = select_good_feat(feat,10,'pos','neg');
 save_features(good_feat,label);
 fprintf('done\n');

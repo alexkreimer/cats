@@ -1,4 +1,3 @@
-clear all;
 close all;
 dbstop if error;
 

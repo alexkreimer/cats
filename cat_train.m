@@ -35,21 +35,14 @@ if ~exist(model_feat_file,'file')
     mparams.filenames = mparams.filenames(1:2);
     mparams.dirname = pos_folder;
     mparams.gridstep = 20;
-<<<<<<< HEAD
     % make sure these are odd if you your RT metric funcs (@ssd etc)
-=======
->>>>>>> cbce208b5ad6ba04d1b2f065e2924e3dc426e726
     mparams.winsize = [41 41];
     feat = gen_model_feat(mparams);
     save(model_feat_file,'feat','mparams','-v7.3');
 else
     fprintf('reading model features from %s...',model_feat_file);
-<<<<<<< HEAD
     load(model_feat_file)
     fprintf('done\n');
-=======
-    load(model_feat_file);
->>>>>>> cbce208b5ad6ba04d1b2f065e2924e3dc426e726
 end
 fprintf('done\n');
 
@@ -64,10 +57,7 @@ if ~exist(pos_feat_file,'file')
 else
     fprintf('reading pre-computed distances to positive samples from %s...',pos_feat_file);
     load(pos_feat_file);
-<<<<<<< HEAD
     fprintf('done\n');
-=======
->>>>>>> cbce208b5ad6ba04d1b2f065e2924e3dc426e726
 end
 fprintf('done\n');
 
@@ -83,18 +73,11 @@ if ~exist(neg_feat_file,'file')
 else
     fprintf('reading pre-computed distances to negative samples from %s...',neg_feat_file);
     load(neg_feat_file);
-<<<<<<< HEAD
     fprintf('done\n');
-=======
->>>>>>> cbce208b5ad6ba04d1b2f065e2924e3dc426e726
 end
 fprintf('done\n');
 
-<<<<<<< HEAD
 fprintf('selecting & saving features...');
-=======
-fprintf('selecting and saving features...');
->>>>>>> cbce208b5ad6ba04d1b2f065e2924e3dc426e726
 good_feat = select_good_feat(feat,10,'pos','neg');
 save_features(good_feat,label);
 fprintf('done\n');
@@ -149,9 +132,10 @@ figure;
 grid on;
 xlabel('False Positive Rate (FPR)','FontSize',12);
 ylabel('True Positive Rate (TPR)','FontSize',12);
-title('Classification performance by SVM','FontSize',12);
+title(sprintf('Classification performance by SVM,%s',label),'FontSize',12);
 hold on;
 [xx,yy] = perfcurve(test_labels,scores_svm,1,'xvals','all');
+
 plot(xx,yy(:,1),'LineWidth',2); hold on;
 
 %# get accuracy

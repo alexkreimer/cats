@@ -1,5 +1,7 @@
 function cat_train(dst_fn,label)
 
+% dst_fn is really a similarity function
+
 model_feat_file = sprintf('model_feat_%s.mat',label);
 pos_feat_file = sprintf('pos_feat_%s.mat',label);
 neg_feat_file = sprintf('neg_feat_%s.mat',label);
@@ -78,7 +80,7 @@ end
 fprintf('done\n');
 
 fprintf('selecting & saving features...');
-good_feat = select_good_feat(feat,10,'pos','neg');
+good_feat = select_good_feat(feat,4,'pos','neg');
 save_features(good_feat,label);
 fprintf('done\n');
 

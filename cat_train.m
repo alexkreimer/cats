@@ -34,9 +34,9 @@ neg_folder = 'negative';
 if ~exist(model_feat_file,'file')
     fprintf('generating model features...');
     mparams.filenames = [dir(fullfile(pos_folder,'*.png')); dir(fullfile(pos_folder,'*.jpg'))];
-    mparams.filenames = mparams.filenames(1:2);
+    mparams.filenames = mparams.filenames(1:20);
     mparams.dirname = pos_folder;
-    mparams.gridstep = 20;
+    mparams.gridstep = 60;
     % make sure these are odd if you your RT metric funcs (@ssd etc)
     mparams.winsize = [41 41];
     feat = gen_model_feat(mparams);
@@ -51,7 +51,7 @@ fprintf('done\n');
 if ~exist(pos_feat_file,'file')
     fprintf('generating dists from model to the positive images...');
     pparams.filenames = [dir(fullfile(pos_folder,'*.png')); dir(fullfile(pos_folder,'*.jpg'))];
-    pparams.filenames = pparams.filenames(11:21);
+    pparams.filenames = pparams.filenames(21:80);
     pparams.dirname = pos_folder;
     pparams.dist_fn = dst_fn;
     feat = calc_dists(pparams,feat,'pos');
@@ -66,7 +66,7 @@ fprintf('done\n');
 if ~exist(neg_feat_file,'file')
     fprintf('generating dists from model to the negative images...');
     nparams.filenames = [dir(fullfile(neg_folder,'*.png')); dir(fullfile(neg_folder,'*.jpg'))];
-    nparams.filenames = nparams.filenames(1:10);
+    nparams.filenames = nparams.filenames(1:50);
     nparams.dirname = neg_folder;
     nparams.dist_fn = dst_fn;
     feat = calc_dists(nparams,feat,'neg');
@@ -80,7 +80,7 @@ end
 fprintf('done\n');
 
 fprintf('selecting & saving features...');
-good_feat = select_good_feat(feat,4,'pos','neg');
+good_feat = select_good_feat(feat,10,'pos','neg');
 save_features(good_feat,label);
 fprintf('done\n');
 
